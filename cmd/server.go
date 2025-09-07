@@ -2,45 +2,49 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"math/rand"
 	"net/http"
+
+	"github.com/cjcocokrisp/t1dash/internal/templates"
+	"github.com/cjcocokrisp/t1dash/pkg/env"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/spf13/cobra"
 )
 
-// TODO: Add embed file system into a common variable
+type ServerConfig struct {
+	Port int
+}
 
 func newServerCommand() *cobra.Command {
+	cfg := &ServerConfig{}
+
 	var serverCmd = &cobra.Command{
 		Use:   "server",
 		Short: "Runs T1 Dash server",
 		Run: func(cmd *cobra.Command, args []string) {
-			runServer()
+			runServer(cfg)
 		},
 	}
+
+	serverCmd.Flags().IntVar(&cfg.Port, "port", env.ParseNum("T1DASH_PORT", 8080, 0, 65535), "Port for the server to run on, defaults to 8080")
 	return serverCmd
 }
 
-func runServer() {
+func runServer(cfg *ServerConfig) {
+	templates.InitTemplates()
+
 	r := chi.NewRouter()
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl, err := template.ParseFiles("../web/templates/index.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 		min := 50
 		max := 350
 		data := map[string]int{
 			"EGV": rand.Intn(max-min+1) + min,
 		}
 
-		tmpl.Execute(w, data)
+		templates.Templates.ExecuteTemplate(w, "index.html", data)
 	})
 
-	fmt.Println("Started http server on port :3000")
-	http.ListenAndServe(":3000", r)
+	fmt.Printf("Started http server on port :%d\n", cfg.Port)
+	http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), r)
 }
