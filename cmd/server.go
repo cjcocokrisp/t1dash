@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"net/http"
 
 	"github.com/cjcocokrisp/t1dash/internal/templates"
+	"github.com/cjcocokrisp/t1dash/internal/ui"
 	"github.com/cjcocokrisp/t1dash/pkg/env"
 
 	"github.com/go-chi/chi/v5"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -35,16 +36,10 @@ func runServer(cfg *ServerConfig) {
 	templates.InitTemplates()
 
 	r := chi.NewRouter()
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		min := 50
-		max := 350
-		data := map[string]int{
-			"EGV": rand.Intn(max-min+1) + min,
-		}
+	r.Get("/", ui.IndexTestPage)
 
-		templates.Templates.ExecuteTemplate(w, "index.html", data)
-	})
-
-	fmt.Printf("Started http server on port :%d\n", cfg.Port)
+	log.WithFields(log.Fields{
+		"port": cfg.Port,
+	}).Info("T1 Dash Server Started")
 	http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), r)
 }
