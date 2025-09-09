@@ -2,10 +2,21 @@
 
 version: '3'
 
+env:
+  IMAGE_NAME: ghcr.io/cjcocokrisp/t1dash:dev
+
 tasks:
   build:
     cmds:
       - go build -o dist/t1dash ./cmd/
+
+  docker-build:
+    cmds:
+      - docker build -t $IMAGE_NAME -f Containerfile .
+
+  podman-build:
+    cmds:
+      - podman build -t $IMAGE_NAME .
 
   clean:
     cmds:

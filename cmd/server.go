@@ -15,6 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// newServerCommand creates the server command for the cli
 func newServerCommand() *cobra.Command {
 
 	var serverCmd = &cobra.Command{
@@ -29,6 +30,7 @@ func newServerCommand() *cobra.Command {
 	return serverCmd
 }
 
+// runServer runs the application and api server
 func runServer() {
 	templates.InitTemplates()
 

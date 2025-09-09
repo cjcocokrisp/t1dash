@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// newRootCommand creates the root command for cli
 func newRootCommand() error {
 	var rootCmd = &cobra.Command{
 		Use:   "t1dash",
@@ -18,6 +19,7 @@ func newRootCommand() error {
 	return err
 }
 
+// main entry point
 func main() {
 	err := newRootCommand()
 	if err != nil {
