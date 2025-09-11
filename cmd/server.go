@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/fs"
 	"net/http"
 
 	"github.com/cjcocokrisp/t1dash/internal/api"
@@ -26,7 +27,7 @@ func newServerCommand() *cobra.Command {
 		},
 	}
 
-	serverCmd.Flags().IntVar(&config.AppCfg.Server.Port, "port", env.ParseNum("T1DASH_PORT", 8080, 0, 65535), "Port for the server to run on, defaults to 8080")
+	serverCmd.Flags().IntVar(&config.AppCfg.Server.Port, "port", env.ParseNum("T1DASH_PORT", 8080, 0, 65535), "Port for the server to run on, defaults to 8080 and can also be set with the env variable T1DASH_PORT")
 	return serverCmd
 }
 
@@ -35,6 +36,13 @@ func runServer() {
 	templates.InitTemplates()
 
 	r := chi.NewRouter()
+
+	staticFS, err := fs.Sub(templates.WebFS, "web/static")
+	if err != nil {
+		log.Fatal(err)
+	}
+	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
+
 	r.Get("/", ui.IndexTestPage)
 	r.Get("/api/rand", api.GenerateRandomEGV)
 
