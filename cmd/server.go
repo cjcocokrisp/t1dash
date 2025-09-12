@@ -27,7 +27,8 @@ func newServerCommand() *cobra.Command {
 		},
 	}
 
-	serverCmd.Flags().IntVar(&config.AppCfg.Server.Port, "port", env.ParseNum("T1DASH_PORT", 8080, 0, 65535), "Port for the server to run on, defaults to 8080 and can also be set with the env variable T1DASH_PORT")
+	serverCmd.Flags().IntVarP(&config.AppCfg.Server.Port, "port", "p", env.ParseNum("T1DASH_PORT", 8080, 0, 65535), "Port for the server to run on, defaults to 8080 and can also be set with the env variable T1DASH_PORT")
+	serverCmd.Flags().StringVar(&config.AppCfg.Server.Hostname, "host", env.ParseString("T1DASH_HOST", "localhost"), "Host for the server when it makes requests to the API")
 	return serverCmd
 }
 
@@ -47,6 +48,7 @@ func runServer() {
 	r.Get("/api/rand", api.GenerateRandomEGV)
 
 	log.WithFields(log.Fields{
+		"host": config.AppCfg.Server.Hostname,
 		"port": config.AppCfg.Server.Port,
 	}).Info("T1 Dash Server Started")
 	http.ListenAndServe(fmt.Sprintf(":%d", config.AppCfg.Server.Port), r)

@@ -27,3 +27,11 @@ func ParseNum(env string, defaultValue int, min int, max int) int {
 
 	return num
 }
+
+func ParseString(env string, defaultValue string) string {
+	str := os.Getenv(env)
+	if str == "" {
+		return defaultValue
+	}
+	return str
+}
