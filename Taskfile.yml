@@ -8,6 +8,7 @@ env:
 tasks:
   build:
     cmds:
+      - npm run build:css
       - go build -o dist/t1dash ./cmd/
 
   docker-build:
@@ -20,4 +21,4 @@ tasks:
 
   clean:
     cmds:
-      - rm dist/t1dash
+      - rm dist/t1dash internal/templates/web/static/style.css

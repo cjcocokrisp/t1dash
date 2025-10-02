@@ -1,0 +1,29 @@
+{
+  "name": "t1dash",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">     <img src=\"internal/templates/web/static/logo.png\" alt=\"Logo\" width=\"50%\" height=\"50%\"/>     <h3>A Self Hostable Type 1 Diabetes Data Dashboard</h3> </div>",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./app.css -o ./internal/templates/web/static/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cjcocokrisp/t1dash.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/cjcocokrisp/t1dash/issues"
+  },
+  "homepage": "https://github.com/cjcocokrisp/t1dash#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  },
+  "dependencies": {
+    "daisyui": "^4.12.24"
+  }
+}

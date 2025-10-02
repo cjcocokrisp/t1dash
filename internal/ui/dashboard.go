@@ -14,7 +14,7 @@ import (
 
 // IndexTestPage is the handler for a test page
 func IndexTestPage(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get(fmt.Sprintf("http://%s:%d/api/rand", config.AppCfg.Server.Hostname, config.AppCfg.Server.Port))
+	resp, err := http.Get(fmt.Sprintf("http://%s:%d/api/rand", config.AppCfg.ServerHostname, config.AppCfg.ServerPort))
 	if err != nil {
 		log.Fatal("Failed to make http request")
 	}
