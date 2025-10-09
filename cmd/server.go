@@ -45,6 +45,8 @@ func runServer() {
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
 
 	r.Get("/", ui.IndexTestPage)
+	r.Get("/welcome", ui.WelcomePage)
+	r.Get("/setup", ui.SetUpContent)
 	r.Get("/api/rand", api.GenerateRandomEGV)
 
 	log.WithFields(log.Fields{

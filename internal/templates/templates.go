@@ -3,11 +3,14 @@ package templates
 import (
 	"embed"
 	"html/template"
+	"io/fs"
+	"os"
+	"path/filepath"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/cjcocokrisp/t1dash/pkg/util"
 )
 
-//go:embed web/templates/*.html web/static/*
+//go:embed web/templates/** web/static/*
 var WebFS embed.FS
 
 // Var that holds templates
@@ -17,9 +20,39 @@ var Templates *template.Template
 // webpage templates. This function must be ran before
 // any of the handlers are called
 func InitTemplates() {
-	t, err := template.ParseFS(WebFS, "web/templates/*.html")
+	var err error
+	Templates, err = parseEmbedTemplates()
 	if err != nil {
-		log.Fatalf("Failed to parse templates: %v", err)
+		util.LogError("FATAL", "templates", err)
+		os.Exit(1)
 	}
-	Templates = t
+}
+
+// parseEmbedTemplates parses the WebFS embed filesystem for html
+// templates and adds them to a template which is returned
+func parseEmbedTemplates() (*template.Template, error) {
+	t := template.New("")
+	templateFS, err := fs.Sub(WebFS, "web/templates")
+	if err != nil {
+		return nil, err
+	}
+
+	err = fs.WalkDir(templateFS, ".", func(path string, dir fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if dir.IsDir() {
+			return nil
+		}
+
+		if filepath.Ext(path) == ".html" {
+			content, err := fs.ReadFile(templateFS, path)
+			if err != nil {
+				return err
+			}
+			t, err = t.New(path).Parse(string(content))
+		}
+		return nil
+	})
+	return t, err
 }
