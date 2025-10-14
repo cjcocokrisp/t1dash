@@ -20,6 +20,13 @@ func LogError(kind string, location string, err error) {
 	}).Error(kind)
 }
 
+func LogPgError(code string, message string) {
+	log.WithFields(log.Fields{
+		"code":    code,
+		"message": message,
+	}).Error("DATABASE")
+}
+
 func ValidateHTMXRequest(r *http.Request) bool {
 	return r.Header.Get("HX-Request") == "true"
 }

@@ -22,5 +22,5 @@ tasks:
 
   clean:
     cmds:
-      - rm dist/t1dash internal/templates/web/static/style.css
+      - rm dist/t1dash internal/templates/web/static/style.css internal/db/setup-db.sh
       - rm -r internal/templates/web/

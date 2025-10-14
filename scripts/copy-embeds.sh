@@ -5,3 +5,4 @@
 # clean and have only their Go code in them on the repo.
 
 cp -r web/ internal/templates/web/
+cp scripts/setup-db.sh internal/db/
