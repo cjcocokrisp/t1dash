@@ -4,7 +4,7 @@
   "description": "<div align=\"center\">     <img src=\"internal/templates/web/static/logo.png\" alt=\"Logo\" width=\"50%\" height=\"50%\"/>     <h3>A Self Hostable Type 1 Diabetes Data Dashboard</h3> </div>",
   "main": "index.js",
   "scripts": {
-    "build:css": "npx tailwindcss -i ./app.css -o ./internal/templates/web/static/style.css"
+    "build:css": "npx tailwindcss -i ./app.css -o ./web/static/style.css"
   },
   "repository": {
     "type": "git",

@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="internal/templates/web/static/logo.png" alt="Logo" width="50%" height="50%"/>
+    <img src="web/static/logo.png" alt="Logo" width="50%" height="50%"/>
     <h3>A Self Hostable Type 1 Diabetes Data Dashboard</h3>
 </div>
 

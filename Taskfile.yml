@@ -9,6 +9,7 @@ tasks:
   build:
     cmds:
       - npm run build:css
+      - ./scripts/copy-embeds.sh
       - go build -o dist/t1dash ./cmd/
 
   docker-build:
@@ -22,3 +23,4 @@ tasks:
   clean:
     cmds:
       - rm dist/t1dash internal/templates/web/static/style.css
+      - rm -r internal/templates/web/

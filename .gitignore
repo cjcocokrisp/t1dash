@@ -1,3 +1,4 @@
 dist/
 node_modules/
-internal/templates/web/static/style.css
+internal/templates/web/**
+web/static/style.css
