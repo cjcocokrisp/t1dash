@@ -6,3 +6,4 @@
 
 cp -r web/ internal/templates/web/
 cp scripts/setup-db.sh internal/db/
+cp -r migrations/ internal/db/

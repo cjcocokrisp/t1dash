@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	_ "embed"
+	"embed"
 	"errors"
 	"fmt"
 	"os"
@@ -11,6 +11,9 @@ import (
 
 	"github.com/cjcocokrisp/t1dash/internal/config"
 	"github.com/cjcocokrisp/t1dash/pkg/util"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	log "github.com/sirupsen/logrus"
@@ -18,6 +21,9 @@ import (
 
 //go:embed setup-db.sh
 var setupScript []byte
+
+//go:embed migrations/*.sql
+var MigrationFS embed.FS
 
 // URL for the DB must be inited before using
 var (
@@ -29,6 +35,9 @@ func InitDBURL(hostname string, port int, database string, user string, password
 	DBUrl = fmt.Sprintf("postgresql://%s:%s@%s:%d/%s", user, password, hostname, port, database)
 }
 
+// InitDBConnection sets up the database connection
+// If the database does not exist it creates it
+// It also checks if the tables in the db exists and then creates those as well
 func InitDBConnection() {
 	if DBUrl == "" {
 		log.WithFields(log.Fields{
@@ -67,30 +76,51 @@ func InitDBConnection() {
 		}
 	}
 	log.Info("Database connection successful")
+
+	// Check if tables exist and if they don't create them
+	tables := []string{"users", "sessions"} // More tables will be added
+
+	for _, t := range tables {
+		var exists bool
+		query := "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = $1)"
+		err = DBPool.QueryRow(context.Background(), query, t).Scan(&exists)
+		if err != nil {
+			util.LogError("Failed to query information_schema for table names", "setup", err)
+			os.Exit(1)
+		}
+
+		if !exists {
+			log.Info("A table was missing and needs to be added, running migrations")
+			createTables()
+			break
+		}
+	}
 }
 
 func CloseDBConnection() {
 	DBPool.Close()
 }
 
+// setupDB creates the database and requested user
+// Runs the shell script ~/scripts/setup-db.sh
 func setupDB() {
 	temp, err := os.CreateTemp("", "setup-db-*.sh")
 	if err != nil {
-		util.LogError("Creating temp file for database creation failed", "setup", err)
+		util.LogError("Creating temp file for database creation failed", "setup(db)", err)
 		os.Exit(1)
 	}
 	defer os.Remove(temp.Name())
 
 	_, err = temp.Write(setupScript)
 	if err != nil {
-		util.LogError("Writing setup script to temp file failed", "setup", err)
+		util.LogError("Writing setup script to temp file failed", "setup(db)", err)
 		os.Exit(1)
 	}
 	temp.Close()
 
 	err = os.Chmod(temp.Name(), 0755)
 	if err != nil {
-		util.LogError("Chmod for temp file failed", "setup", err)
+		util.LogError("Chmod for temp file failed", "setup(db)", err)
 		os.Exit(1)
 	}
 
@@ -106,4 +136,26 @@ func setupDB() {
 		os.Exit(1)
 	}
 	log.Info("Database created successfully")
+}
+
+// createTables runs the migrations for the project and creates the tables
+func createTables() {
+	d, err := iofs.New(MigrationFS, "migrations")
+	if err != nil {
+		util.LogError("Error setting up iofs for migrations", "setup(tables)", err)
+		os.Exit(1)
+	}
+
+	m, err := migrate.NewWithSourceInstance("iofs", d, DBUrl+"?sslmode=disable")
+	if err != nil {
+		util.LogError("Error creating instance connected to DB", "setup(tables)", err)
+		os.Exit(1)
+	}
+
+	err = m.Up()
+	if err != nil {
+		util.LogError("Error running migrations", "setup(db)", err)
+		os.Exit(1)
+	}
+	log.Info("Migrations finished, successfully created tables")
 }

@@ -36,8 +36,8 @@ func newServerCommand() *cobra.Command {
 	serverCmd.Flags().StringVar(&config.AppCfg.DBHostname, "db-host", env.ParseString("DB_HOST", "localhost"), "Hostname for Postgres DB. Can be set with DB_HOST.")
 	serverCmd.Flags().IntVar(&config.AppCfg.DBPort, "db-port", env.ParseNum("DB_PORT", 5432, 0, 65535), "Port for the database, can be set with DB_PORT.")
 	serverCmd.Flags().StringVar(&config.AppCfg.DBDatabase, "db-database", env.ParseString("DB_DATABASE", "t1dash"), "Name of the database, can be set with DB_DATABASE.")
-	serverCmd.Flags().StringVar(&config.AppCfg.DBUser, "db-user", env.ParseString("DB_USER", "t1dash-user"), "Name of user for database, can be set with DB_USER.")
-	serverCmd.Flags().StringVar(&config.AppCfg.DBPassword, "db-password", env.ParseString("DB_PASSWORD", ""), "Password of DB user, left empty if no value provided. can be set with DB_PASSWORD")
+	serverCmd.Flags().StringVar(&config.AppCfg.DBUser, "db-user", env.ParseString("DB_USER", "t1dash_user"), "Name of user for database, can be set with DB_USER.")
+	serverCmd.Flags().StringVar(&config.AppCfg.DBPassword, "db-password", env.ParseString("DB_PASSWORD", "t1dash"), "Password of DB user, left empty if no value provided. can be set with DB_PASSWORD")
 	serverCmd.Flags().StringVar(&config.AppCfg.DBRootPassword, "db-root-password", env.ParseString("DB_ROOT_PASSWORD", ""), "Password for the postgres root user. Used to create database and user. Can be set with DB_ROOT_PASSWORD")
 	return serverCmd
 }
