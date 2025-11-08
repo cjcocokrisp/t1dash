@@ -4,3 +4,5 @@ internal/templates/web/**
 internal/db/migrations/**
 web/static/style.css
 internal/db/setup-db.sh
+*.crt
+*.key

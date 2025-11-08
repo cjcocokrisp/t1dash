@@ -4,6 +4,11 @@ package config
 type T1DashConfig struct {
 	ServerPort     int    // Port where server runs on
 	ServerHostname string // Hostname where server is run
+	Insecure       bool   // If true do not use TLS
+	TLSCACertPath  string // Path to ca cert for tls
+	TLSCAKeyPath   string // Path to ca key for tls
+	TLSCertPath    string // Path to cert for tls
+	TLSKeyPath     string // Path to key for tls
 	DBHostname     string // Host for DB
 	DBPort         int    // Port for DB
 	DBRootPassword string // Password for root postgres user
@@ -12,5 +17,5 @@ type T1DashConfig struct {
 	DBPassword     string // Password for DB
 }
 
-// Global app config
+// AppCfg is the global app config
 var AppCfg T1DashConfig
