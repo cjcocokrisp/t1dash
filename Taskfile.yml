@@ -12,6 +12,9 @@ tasks:
       - ./scripts/copy-embeds.sh
       - go build -o dist/t1dash ./cmd/
 
+  run:
+    - air -- {{ .BIN_ARGS }}
+
   docker-build:
     cmds:
       - docker build -t $IMAGE_NAME -f Containerfile .
