@@ -1,34 +1,42 @@
 package ui
 
 import (
-	"fmt"
-	"io"
 	"net/http"
 
-	"github.com/cjcocokrisp/t1dash/internal/config"
 	"github.com/cjcocokrisp/t1dash/internal/templates"
 	"github.com/cjcocokrisp/t1dash/pkg/util"
-
-	log "github.com/sirupsen/logrus"
 )
 
-// IndexTestPage is the handler for a test page
-func IndexTestPage(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get(fmt.Sprintf("http://%s:%d/api/rand", config.AppCfg.ServerHostname, config.AppCfg.ServerPort))
-	if err != nil {
-		log.Fatal("Failed to make http request")
-	}
-	defer resp.Body.Close()
+// DashboardPage is the handler for bringing you to the home of the dashboard
+func DashboardPage(w http.ResponseWriter, r *http.Request) {
+	// TODO: Add logic for sign and such
+	util.LogGetRequest("/dashboard", r.RemoteAddr)
+	templates.Templates.ExecuteTemplate(w, "dashboard/base.html", nil)
+}
 
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal("Failed to read response body")
+// DashboardContent fills in the main content of the dashboard page with content for it
+func DashboardContent(w http.ResponseWriter, r *http.Request) {
+	// TODO: logic for data charts and such will be added here
+	util.LogGetRequest("/dashboard/dashboard", r.RemoteAddr)
+	if util.ValidateHTMXRequest(r) {
+		templates.Templates.ExecuteTemplate(w, "dashboard/dashboard.html", nil)
 	}
+}
 
-	fields := map[string]string{
-		"EGV": string(data),
+// ReportsContent fills in the main content of the dashboard page with content for it
+func ReportsContent(w http.ResponseWriter, r *http.Request) {
+	// TODO: do logic and content for this
+	util.LogGetRequest("/dashboard/reports", r.RemoteAddr)
+	if util.ValidateHTMXRequest(r) {
+		templates.Templates.ExecuteTemplate(w, "dashboard/reports.html", nil)
 	}
+}
 
-	util.LogGetRequest("/", r.RemoteAddr)
-	templates.Templates.ExecuteTemplate(w, "index.html", fields)
+// UploadContent fills in the main content of the dashboard page with content for it
+func UploadContent(w http.ResponseWriter, r *http.Request) {
+	// TODO: add content for this
+	util.LogGetRequest("/dashboard/upload", r.RemoteAddr)
+	if util.ValidateHTMXRequest(r) {
+		templates.Templates.ExecuteTemplate(w, "dashboard/upload.html", nil)
+	}
 }

@@ -10,21 +10,26 @@ import (
 	"github.com/cjcocokrisp/t1dash/pkg/util"
 )
 
-// WelcomePage is the handler for the welcome page
-func WelcomePage(w http.ResponseWriter, r *http.Request) {
-	// TODO: Check if there are users in the table if there are redirect to login
+func LoginPage(w http.ResponseWriter, r *http.Request) {
+	// TODO: add logic
 
-	util.LogGetRequest("/welcome", r.RemoteAddr)
-	//data := map[string]string{
-	//	"content": "welcome/welcome.html",
-	//}
-	templates.Templates.ExecuteTemplate(w, "welcome/layout.html", nil)
+	util.LogGetRequest("/login", r.RemoteAddr)
+	templates.Templates.ExecuteTemplate(w, "login/base.html", nil)
 }
 
-func SetUpContent(w http.ResponseWriter, r *http.Request) {
-	// TODO: REFACTOR FOR AN ERROR PAGE REDIRECT!
-	util.LogGetRequest("/setup", r.RemoteAddr)
-	if util.ValidateHTMXRequest(r) {
-		templates.Templates.ExecuteTemplate(w, "welcome/setup.html", nil)
+// SetupPage is the handler for the setup/welcome page will be redirected from base or login
+// based on if you have any users
+func SetupPage(w http.ResponseWriter, r *http.Request) {
+	// TODO: Check if there are users in the table if there are redirect to login
+
+	content := r.URL.Query().Get("content")
+	contentTmpl := "setup/base.html"
+	if util.ValidateHTMXRequest(r) && content == "agreement" {
+		contentTmpl = "setup/agreement.html"
+	} else if util.ValidateHTMXRequest(r) && content == "setup" {
+		contentTmpl = "setup/setup.html"
 	}
+
+	util.LogGetRequest("/welcome", r.RemoteAddr)
+	templates.Templates.ExecuteTemplate(w, contentTmpl, nil)
 }

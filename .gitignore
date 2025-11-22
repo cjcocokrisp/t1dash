@@ -6,3 +6,4 @@ web/static/style.css
 internal/db/setup-db.sh
 *.crt
 *.key
+tmp/

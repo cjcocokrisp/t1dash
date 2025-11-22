@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 
 	"github.com/cjcocokrisp/t1dash/pkg/util"
+
+	log "github.com/sirupsen/logrus"
 )
 
 //go:embed web/templates/** web/static/*
@@ -51,6 +53,14 @@ func parseEmbedTemplates() (*template.Template, error) {
 				return err
 			}
 			t, err = t.New(path).Parse(string(content))
+			if err != nil {
+				log.WithFields(log.Fields{
+					"template": path,
+					"error":    err,
+					"location": "template parsing",
+				}).Error("FATAL")
+				os.Exit(1)
+			}
 		}
 		return nil
 	})

@@ -4,6 +4,6 @@
 # directives to the correct place. This method is used to keep subdirectories
 # clean and have only their Go code in them on the repo.
 
-cp -r web/ internal/templates/web/
+cp -r web/ internal/templates/
 cp scripts/setup-db.sh internal/db/
 cp -r migrations/ internal/db/

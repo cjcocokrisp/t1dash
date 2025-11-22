@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="t1dash">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/style.css" rel="stylesheet">
+    <title>Welcome!</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+  <div id="content">
+    <div class="hero bg-base-200 min-h-screen">
+      <div class="hero-content text-center">
+        <div class="max-w-md" id="hero-content">
+          <h1 class="text-5xl font-bold">Welcome!</h1>
+          <p class="py-6">
+            Welcome to T1Dash, a self hosted diabetes data dashboard. Before we
+            begin, let's get set up.
+          </p>
+          <button class="btn btn-primary" hx-get="/welcome?content=agreement" hx-target="#hero-content" hx-swap="innerHTML">Get Started</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

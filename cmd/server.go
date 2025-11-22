@@ -7,7 +7,6 @@ import (
 	stdlog "log"
 	"net/http"
 
-	"github.com/cjcocokrisp/t1dash/internal/api"
 	"github.com/cjcocokrisp/t1dash/internal/config"
 	"github.com/cjcocokrisp/t1dash/internal/db"
 	"github.com/cjcocokrisp/t1dash/internal/templates"
@@ -76,10 +75,15 @@ func runServer() {
 	}
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
 
-	r.Get("/", ui.IndexTestPage)
-	r.Get("/welcome", ui.WelcomePage)
-	r.Get("/setup", ui.SetUpContent)
-	r.Get("/api/rand", api.GenerateRandomEGV)
+	r.Get("/dashboard", ui.DashboardPage)
+	r.Get("/dashboard/dashboard", ui.DashboardContent)
+	r.Get("/dashboard/reports", ui.ReportsContent)
+	r.Get("/dashboard/upload", ui.UploadContent)
+	r.Get("/settings/app", ui.AppSettingsContent)
+	r.Get("/settings/glucose", ui.GlucoseSettingsContent)
+	r.Get("/settings/user", ui.UserSettingsContent)
+	r.Get("/login", ui.LoginPage)
+	r.Get("/welcome", ui.SetupPage)
 
 	server := &http.Server{
 		Addr:     fmt.Sprintf(":%d", config.AppCfg.ServerPort),
