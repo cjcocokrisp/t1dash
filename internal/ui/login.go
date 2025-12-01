@@ -6,12 +6,18 @@ package ui
 import (
 	"net/http"
 
+	"github.com/cjcocokrisp/t1dash/internal/db"
 	"github.com/cjcocokrisp/t1dash/internal/templates"
 	"github.com/cjcocokrisp/t1dash/pkg/util"
 )
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {
 	// TODO: add logic
+	if exists, err := db.CheckIfUsersExist(); !exists && err == nil {
+		util.LogRedirect("/login", "/welcome", r.RemoteAddr, "no users exists")
+		http.Redirect(w, r, "/welcome", http.StatusMovedPermanently)
+		return
+	}
 
 	util.LogGetRequest("/login", r.RemoteAddr)
 	templates.Templates.ExecuteTemplate(w, "login/base.html", nil)
@@ -21,6 +27,7 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 // based on if you have any users
 func SetupPage(w http.ResponseWriter, r *http.Request) {
 	// TODO: Check if there are users in the table if there are redirect to login
+	// TODO: refactor to use multiple endpoints, it's better practice
 
 	content := r.URL.Query().Get("content")
 	contentTmpl := "setup/base.html"

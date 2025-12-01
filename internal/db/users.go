@@ -159,3 +159,20 @@ func DeleteUserByUsername(username string) error {
 
 	return err
 }
+
+// CheckIfUsersExist returns a bool of whether or not users exist in the users table
+func CheckIfUsersExist() (bool, error) {
+	if DBPool == nil {
+		return false, util.NullDBConnection()
+	}
+
+	query := "SELECT count(*) FROM users"
+
+	var count int
+	err := DBPool.QueryRow(context.TODO(), query).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}

@@ -13,6 +13,15 @@ func LogGetRequest(path string, client string) {
 	}).Info("GET Request")
 }
 
+func LogRedirect(source, destination, client, reason string) {
+	log.WithFields(log.Fields{
+		"source":      source,
+		"destination": destination,
+		"client":      client,
+		"reason":      reason,
+	}).Info("Redirecting client")
+}
+
 func LogError(kind string, location string, err error) {
 	log.WithFields(log.Fields{
 		"location": location,
