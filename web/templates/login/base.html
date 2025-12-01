@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="t1dash">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/style.css" rel="stylesheet">
+    <title>Welcome!</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+ <div class="h-screen flex flex-col items-center justify-center bg-base-200">
+  <div class="card bg-neutral w-full max-w-sm shrink-0 shadow-2xl">
+    <form class="card-body">
+      <div class="text-center">
+        <img src="/static/logo.png" alt="T1 Dash Logo">
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Username</span>
+        </label>
+        <input type="text" placeholder="Username" class="input input-bordered" required />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Password</span>
+        </label>
+        <input type="password" placeholder="Password" class="input input-bordered" required />
+      </div>
+      <div class="form-control mt-6">
+        <button class="btn btn-primary">Login</button>
+      </div>
+    </form>
+  </div>
+</div> 
+</body>
+</html>
