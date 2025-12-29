@@ -76,6 +76,7 @@ func runServer() {
 	}
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
 
+	r.Get("/", ui.RootRedirects)
 	r.Get("/dashboard", ui.DashboardPage)
 	r.Get("/dashboard/dashboard", ui.DashboardContent)
 	r.Get("/dashboard/reports", ui.ReportsContent)
