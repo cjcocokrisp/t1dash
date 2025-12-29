@@ -7,6 +7,7 @@ import (
 	stdlog "log"
 	"net/http"
 
+	"github.com/cjcocokrisp/t1dash/internal/api"
 	"github.com/cjcocokrisp/t1dash/internal/config"
 	"github.com/cjcocokrisp/t1dash/internal/db"
 	"github.com/cjcocokrisp/t1dash/internal/templates"
@@ -84,6 +85,9 @@ func runServer() {
 	r.Get("/settings/user", ui.UserSettingsContent)
 	r.Get("/login", ui.LoginPage)
 	r.Get("/welcome", ui.SetupPage)
+
+	r.Post("/welcome", api.InitialSetupAccountCreation)
+	r.Post("/login", api.LoginUser)
 
 	server := &http.Server{
 		Addr:     fmt.Sprintf(":%d", config.AppCfg.ServerPort),

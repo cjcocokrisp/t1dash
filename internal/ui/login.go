@@ -26,8 +26,12 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 // SetupPage is the handler for the setup/welcome page will be redirected from base or login
 // based on if you have any users
 func SetupPage(w http.ResponseWriter, r *http.Request) {
-	// TODO: Check if there are users in the table if there are redirect to login
 	// TODO: refactor to use multiple endpoints, it's better practice
+	if exists, err := db.CheckIfUsersExist(); exists && err == nil {
+		util.LogRedirect("/welcome", "/login", r.RemoteAddr, "a users exists")
+		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+		return
+	}
 
 	content := r.URL.Query().Get("content")
 	contentTmpl := "setup/base.html"

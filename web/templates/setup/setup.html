@@ -1,6 +1,6 @@
 <div class="h-screen flex flex-col items-center justify-center bg-base-200">
   <div class="card bg-neutral w-full max-w-sm shrink-0 shadow-2xl">
-    <form class="card-body">
+    <form class="card-body" action="/welcome" method="POST">
       <div class="text-center">
         Admin User Creation
       </div>
@@ -8,25 +8,25 @@
         <label class="label">
           <span class="label-text">Username</span>
         </label>
-        <input type="text" placeholder="Username" class="input input-bordered" required />
+        <input name="username" type="text" placeholder="Username" class="input input-bordered" maxlength="32" required />
       </div>
       <div class="form-control">
         <label class="label">
           <span class="label-text">Password</span>
         </label>
-        <input type="password" placeholder="Password" class="input input-bordered" required />
+        <input name="password" type="password" placeholder="Password" class="input input-bordered" minlength="8" maxlength="32" required />
       </div>
       <div class="form-control">
         <label class="label">
           <span class="label-text">Firstname</span>
         </label>
-        <input type="text" placeholder="Username" class="input input-bordered" required />
+        <input name="firstname" type="text" placeholder="Username" class="input input-bordered" required />
       </div>
       <div class="form-control">
         <label class="label">
           <span class="label-text">Lastname</span>
         </label>
-        <input type="text" placeholder="Username" class="input input-bordered" required />
+        <input name="lastname" type="text" placeholder="Username" class="input input-bordered" required />
       </div>
       <div class="form-control mt-6">
         <button class="btn btn-primary">Create</button>
