@@ -44,5 +44,6 @@ func InitialSetupAccountCreation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
+	// TODO: add redirect to dashboard
 	// TODO: add stuff for creating a session when needed
 }

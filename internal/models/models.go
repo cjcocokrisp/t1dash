@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	pgxuuid "github.com/jackc/pgx-gofrs-uuid"
 )
 
@@ -23,4 +25,15 @@ type UserSettings struct {
 
 type UserConnections struct {
 	TestField string `json:"test"`
+}
+
+// Struct that represents a session
+type Session struct {
+	Id        pgxuuid.UUID
+	UserId    pgxuuid.UUID `db:"user_id"` // Associated user id
+	CreatedAt time.Time    `db:"created_at"`
+	ExpiresAt time.Time    `db:"expires_at"`
+	LastSeen  time.Time    `db:"last_seen"`
+	Valid     bool
+	Ip        string
 }
