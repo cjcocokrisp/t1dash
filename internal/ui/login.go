@@ -1,21 +1,23 @@
 package ui
 
-/* login.go handles the ui for both first time set up and logging in
- * after first time set up. */
-
 import (
 	"net/http"
 
 	"github.com/cjcocokrisp/t1dash/internal/db"
+	"github.com/cjcocokrisp/t1dash/internal/session"
 	"github.com/cjcocokrisp/t1dash/internal/templates"
 	"github.com/cjcocokrisp/t1dash/pkg/util"
 )
 
 func LoginPage(w http.ResponseWriter, r *http.Request) {
-	// TODO: add logic
 	if exists, err := db.CheckIfUsersExist(); !exists && err == nil {
 		util.LogRedirect("/login", "/welcome", r.RemoteAddr, "no users exists")
 		http.Redirect(w, r, "/welcome", http.StatusMovedPermanently)
+		return
+	}
+
+	redirected := session.RedirectOnValidSession(&w, r, "/login", "/dashboard")
+	if redirected {
 		return
 	}
 

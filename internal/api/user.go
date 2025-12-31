@@ -5,6 +5,7 @@ import (
 
 	"github.com/cjcocokrisp/t1dash/internal/db"
 	"github.com/cjcocokrisp/t1dash/internal/models"
+	"github.com/cjcocokrisp/t1dash/internal/session"
 	"github.com/cjcocokrisp/t1dash/pkg/crypto"
 	"github.com/cjcocokrisp/t1dash/pkg/util"
 )
@@ -38,12 +39,19 @@ func InitialSetupAccountCreation(w http.ResponseWriter, r *http.Request) {
 		Role:      "admin",
 	}
 
-	err = db.CreateUser(&user)
-	if err != nil {
+	userId, err := db.CreateUser(&user)
+	if err != nil && userId != nil {
 		http.Error(w, "Error creating db entry for user", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
-	// TODO: add redirect to dashboard
-	// TODO: add stuff for creating a session when needed
+
+	cookie, err := session.CreateNewSessionCookie(*userId, r.RemoteAddr)
+	if err != nil {
+		http.Error(w, "Error creating cookie", http.StatusInternalServerError)
+		return
+	}
+	http.SetCookie(w, cookie)
+
+	util.LogRedirect("/welcome", "/dashboard", r.RemoteAddr, "inital user created")
+	http.Redirect(w, r, "/dashboard", http.StatusMovedPermanently)
 }

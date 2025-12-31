@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/cjcocokrisp/t1dash/internal/db"
+	"github.com/cjcocokrisp/t1dash/internal/session"
 	"github.com/cjcocokrisp/t1dash/internal/templates"
 	"github.com/cjcocokrisp/t1dash/pkg/util"
 )
@@ -14,6 +15,11 @@ func DashboardPage(w http.ResponseWriter, r *http.Request) {
 	if exists, err := db.CheckIfUsersExist(); !exists && err == nil {
 		util.LogRedirect("/dashboard", "/welcome", r.RemoteAddr, "no users exists")
 		http.Redirect(w, r, "/welcome", http.StatusMovedPermanently)
+		return
+	}
+
+	redirected := session.RedirectOnInvalidSession(&w, r, "/dashboard", "/login")
+	if redirected {
 		return
 	}
 

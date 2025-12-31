@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/cjcocokrisp/t1dash/internal/db"
+	"github.com/cjcocokrisp/t1dash/internal/session"
 	"github.com/cjcocokrisp/t1dash/internal/templates"
 	"github.com/cjcocokrisp/t1dash/pkg/crypto"
 	"github.com/cjcocokrisp/t1dash/pkg/util"
@@ -32,6 +33,12 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: create user session and probably more stuff
+	cookie, err := session.CreateNewSessionCookie(user.Id, r.RemoteAddr)
+	if err != nil {
+		http.Error(w, "Error creating cookie", http.StatusInternalServerError)
+		return
+	}
+	http.SetCookie(w, cookie)
+
 	w.Header().Set("HX-Redirect", "/dashboard")
 }

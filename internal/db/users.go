@@ -6,35 +6,38 @@ import (
 
 	"github.com/cjcocokrisp/t1dash/internal/models"
 	"github.com/cjcocokrisp/t1dash/pkg/util"
+
+	//pgxuuid "github.com/jackc/pgx-gofrs-uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-// CreateUser inserts a user struct into the database
+// CreateUser inserts a user struct into the database and returns it's id
 // All fields must match the state need for insert
 // id is handled by the database and role is ignored and should be updated after creation
-func CreateUser(user *models.User) error {
+func CreateUser(user *models.User) (*pgtype.UUID, error) {
 	if DBPool == nil {
-		return util.NullDBConnection()
+		return nil, util.NullDBConnection()
 	}
 
 	query := "INSERT INTO users (username, firstname, lastname, password, avatar, settings, connections)" +
-		" VALUES ($1, $2, $3, $4, $5, $6, $7)"
+		" VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id"
 
 	settingsBytes, err := json.Marshal(user.Settings)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	connectionsBytes, err := json.Marshal(user.Connections)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	// Look into seeing if the first return is important
-	_, err = DBPool.Exec(context.Background(), query, user.Username, user.Firstname, user.Lastname, user.Password,
-		user.Avatar, settingsBytes, connectionsBytes)
+	var id pgtype.UUID
+	err = DBPool.QueryRow(context.Background(), query, user.Username, user.Firstname, user.Lastname, user.Password,
+		user.Avatar, settingsBytes, connectionsBytes).Scan(&id)
 
-	return err
+	return &id, err
 }
 
 // GetUserByUsername reads a user by username and then returns a user struct for that user

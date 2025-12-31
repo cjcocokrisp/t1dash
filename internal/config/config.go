@@ -15,6 +15,8 @@ type T1DashConfig struct {
 	DBDatabase     string // Database name for DB
 	DBUser         string // User for DB
 	DBPassword     string // Password for DB
+	SessionTTL     int    // Session total time to live (hours)
+	SessionTimeout int    // Session timeout (minutes)
 }
 
 // AppCfg is the global app config

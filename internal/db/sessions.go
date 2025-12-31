@@ -4,14 +4,16 @@ import (
 	"context"
 	"time"
 
+	"github.com/cjcocokrisp/t1dash/internal/config"
 	"github.com/cjcocokrisp/t1dash/internal/models"
 	"github.com/cjcocokrisp/t1dash/pkg/util"
 
-	pgxuuid "github.com/jackc/pgx-gofrs-uuid"
+	//pgxuuid "github.com/jackc/pgx-gofrs-uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-func CreateSession(userId pgxuuid.UUID, ip string) (*pgxuuid.UUID, error) {
+func CreateSession(userId pgtype.UUID, ip string) (*pgtype.UUID, error) {
 	if DBPool == nil {
 		return nil, util.NullDBConnection()
 	}
@@ -20,9 +22,9 @@ func CreateSession(userId pgxuuid.UUID, ip string) (*pgxuuid.UUID, error) {
 		" VALUES ($1, $2, $3, $4, $5, $6) RETURNING id"
 
 	now := time.Now()
-	expireAt := now.Add(1 * time.Hour) // TODO: make it an env variable
+	expireAt := now.Add(time.Duration(config.AppCfg.SessionTTL) * time.Hour)
 
-	var id pgxuuid.UUID
+	var id pgtype.UUID
 	err := DBPool.QueryRow(context.Background(), query, userId, now, expireAt, now, true, ip).Scan(&id)
 	if err != nil {
 		return nil, err
@@ -31,7 +33,7 @@ func CreateSession(userId pgxuuid.UUID, ip string) (*pgxuuid.UUID, error) {
 	return &id, nil
 }
 
-func GetSessionById(sessionId pgxuuid.UUID) (*models.Session, error) {
+func GetSessionById(sessionId pgtype.UUID) (*models.Session, error) {
 	if DBPool == nil {
 		return nil, util.NullDBConnection()
 	}
@@ -48,7 +50,7 @@ func GetSessionById(sessionId pgxuuid.UUID) (*models.Session, error) {
 	return &session, err
 }
 
-func UpdateLastSeen(sessionId pgxuuid.UUID, lastSeen time.Time) error {
+func UpdateLastSeen(sessionId pgtype.UUID, lastSeen time.Time) error {
 	if DBPool == nil {
 		return util.NullDBConnection()
 	}
@@ -60,7 +62,7 @@ func UpdateLastSeen(sessionId pgxuuid.UUID, lastSeen time.Time) error {
 	return err
 }
 
-func InvalidateSession(sessionId pgxuuid.UUID) error {
+func InvalidateSession(sessionId pgtype.UUID) error {
 	if DBPool == nil {
 		return util.NullDBConnection()
 	}
@@ -72,7 +74,7 @@ func InvalidateSession(sessionId pgxuuid.UUID) error {
 	return err
 }
 
-func InvalidateAllSessionsForUser(userId pgxuuid.UUID) error {
+func InvalidateAllSessionsForUser(userId pgtype.UUID) error {
 	if DBPool == nil {
 		return util.NullDBConnection()
 	}
@@ -84,7 +86,7 @@ func InvalidateAllSessionsForUser(userId pgxuuid.UUID) error {
 	return err
 }
 
-func DeleteSession(sessionId pgxuuid.UUID) error {
+func DeleteSession(sessionId pgtype.UUID) error {
 	if DBPool == nil {
 		return util.NullDBConnection()
 	}

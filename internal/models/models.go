@@ -3,13 +3,13 @@ package models
 import (
 	"time"
 
-	pgxuuid "github.com/jackc/pgx-gofrs-uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 // Struct that represents a user
 type User struct {
-	Id          pgxuuid.UUID // UUID
-	Username    string       // username must be unique
+	Id          pgtype.UUID // UUID
+	Username    string      // username must be unique
 	Firstname   string
 	Lastname    string
 	Password    string // Hashed with salt
@@ -29,11 +29,11 @@ type UserConnections struct {
 
 // Struct that represents a session
 type Session struct {
-	Id        pgxuuid.UUID
-	UserId    pgxuuid.UUID `db:"user_id"` // Associated user id
-	CreatedAt time.Time    `db:"created_at"`
-	ExpiresAt time.Time    `db:"expires_at"`
-	LastSeen  time.Time    `db:"last_seen"`
+	Id        pgtype.UUID
+	UserId    pgtype.UUID `db:"user_id"` // Associated user id
+	CreatedAt time.Time   `db:"created_at"`
+	ExpiresAt time.Time   `db:"expires_at"`
+	LastSeen  time.Time   `db:"last_seen"`
 	Valid     bool
 	Ip        string
 }
