@@ -2,7 +2,6 @@ package session
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -33,7 +32,6 @@ func ValidateSession(sessionId pgtype.UUID) (bool, error) {
 	}
 
 	inactive := session.LastSeen.Add(time.Duration(config.AppCfg.SessionTimeout) * time.Minute)
-	fmt.Println(time.Duration(config.AppCfg.SessionTimeout) * time.Minute)
 	if now.After(inactive) {
 		db.InvalidateSession(sessionId)
 		return false, nil

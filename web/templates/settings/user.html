@@ -1,1 +1,115 @@
-<p>USER SETTINGS CONTENT WILL GO HERE</p>
+<div class="flex flex-row flex-wrap gap-8 p-6 justify-start items-start">
+  <div class="card bg-neutral w-full flex-none shadow-2xl">
+    <div class="card-body flex flex-row">
+      <form class="grow">
+        <h1 class="card-title text-xl">Edit User Information</h1>
+        <div id="error-info"></div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Firstname</span>
+          </label>
+          <input name="firstname" type="text" placeholder="Firstname" class="input input-bordered" maxlength="32" />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Lastname</span>
+          </label>
+          <input name="lastname" type="password" placeholder="Lastname" class="input input-bordered" maxlength="32" />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          <input name="password" type="password" placeholder="Password" class="input input-bordered" minlength="8" maxlength="32" />
+        </div>
+
+        <div class="form-control mt-6">
+          <button class="btn btn-primary">Update</button>
+        </div>
+      </form>
+      <div class="flex flex-col gap-8 justify-center items-center w-[45dvw] flex-none">
+        <div class="avatar placeholder justify-self-center">
+          <div class="bg-primary text-neutral-content w-24 h-24 rounded-full">
+            <span class="text-3xl">U</span>
+          </div>
+        </div>
+        <input type="file" class="file-input file-input-bordered file-input-primary w-full max-w-xs" />
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-neutral w-[30dvw] flex-none shadow-2xl">
+    <form class="card-body" hx-post="/">
+      <h1 class="card-title text-xl">Create New User (Admin Only)</h1>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Username</span>
+        </label>
+        <input name="username" type="text" placeholder="Username" class="input input-bordered" maxlength="32" required />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Password</span>
+        </label>
+        <input name="password" type="password" placeholder="Password" class="input input-bordered" minlength="8" maxlength="32" required />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Firstname</span>
+        </label>
+        <input name="firstname" type="text" placeholder="Firstname" class="input input-bordered" required />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Lastname</span>
+        </label>
+        <input name="lastname" type="text" placeholder="Lastname" class="input input-bordered" required />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Role</span>
+        </label>
+        <select class="select select-bordered w-full">
+          <option selected>User</option>
+          <option>Admin</option>
+        </select>
+      </div>
+      <div class="form-control mt-6">
+        <button class="btn btn-primary">Create</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card bg-neutral grow shadow-2xl">
+    <div class="card-body">
+      <h1 class="card-title text-xl">Active Sessions</h1>
+      <div class="flex flex-col gap-4 w-full">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-l">IP Address</h3>
+          <h3 class="font-bold text-l">Expiration Timestamp</h3>
+          <h3 class="font-bold text-l">Last Seen Timestamp</h3>
+          <button class="btn opacity-0 btn-primary">Log Out</button>
+        </div>
+        <div class="flex items-center justify-between">
+          <h3 class="text-l">192.168.0.1</h3>
+          <h3 class="text-l">01/01/26 - 20:00</h3>
+          <h3 class="text-l">01/01/26 - 06:00</h3>
+          <button class="btn btn-primary">Log Out</button>
+        </div>
+        <div class="flex items-center justify-between">
+          <h3 class="text-l">192.168.0.2</h3>
+          <h3 class="text-l">01/02/26 - 19:00</h3>
+          <h3 class="text-l">01/02/26 - 05:00</h3>
+          <button class="btn btn-primary">Log Out</button>
+        </div>
+        <div class="flex items-center justify-between">
+          <h3 class="text-l">192.168.0.3</h3>
+          <h3 class="text-l">01/03/26 - 16:00</h3>
+          <h3 class="text-l">01/03/26 - 00:00</h3>
+          <button class="btn btn-primary">Log Out</button>
+        </div>
+        <button class="btn btn-primary">Log Out All Sessions</button>
+      </div>
+    </div>
+  </div>
+</div>
