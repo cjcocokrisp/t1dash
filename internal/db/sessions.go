@@ -22,7 +22,7 @@ func CreateSession(userId pgtype.UUID, ip string) (*pgtype.UUID, error) {
 		" VALUES ($1, $2, $3, $4, $5, $6) RETURNING id"
 
 	now := time.Now()
-	expireAt := now.Add(time.Duration(config.AppCfg.SessionTTL) * time.Hour)
+	expireAt := now.Add(config.AppCfg.SessionTTL)
 
 	var id pgtype.UUID
 	err := DBPool.QueryRow(context.Background(), query, userId, now, expireAt, now, true, ip).Scan(&id)

@@ -31,7 +31,7 @@ func ValidateSession(sessionId pgtype.UUID) (bool, error) {
 		return false, nil
 	}
 
-	inactive := session.LastSeen.Add(time.Duration(config.AppCfg.SessionTimeout) * time.Minute)
+	inactive := session.LastSeen.Add(config.AppCfg.SessionTimeout)
 	if now.After(inactive) {
 		db.InvalidateSession(sessionId)
 		return false, nil

@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	stdlog "log"
 	"net/http"
+	"time"
 
 	"github.com/cjcocokrisp/t1dash/internal/api"
 	"github.com/cjcocokrisp/t1dash/internal/config"
@@ -46,8 +47,8 @@ func newServerCommand() *cobra.Command {
 	serverCmd.Flags().StringVar(&config.AppCfg.TLSCAKeyPath, "tls-ca-key-ath", env.ParseString("TLS_CA_KEY_PATH", "ca.key"), "Path to ca key for TLS, if it does not exist it will be created at that parth")
 	serverCmd.Flags().StringVar(&config.AppCfg.TLSCertPath, "tls-cert-path", env.ParseString("TLS_CERT_PATH", "server.crt"), "Path to certificate for TLS, if it does not exist it will be created at that path")
 	serverCmd.Flags().StringVar(&config.AppCfg.TLSKeyPath, "tls-key-path", env.ParseString("TLS_KEY_PATH", "server.key"), "Path to key for TLS, if it does not exist it will be created at that path")
-	serverCmd.Flags().IntVar(&config.AppCfg.SessionTTL, "session-ttl", env.ParseNum("SESSION_TTL", 12, 1, 168), "Total time to live for a session in hours, can also be set with SESSION_TTL")
-	serverCmd.Flags().IntVar(&config.AppCfg.SessionTimeout, "session-timeout", env.ParseNum("SESSION_TIMEOUT", 120, 1, 10080), "Timeout time for a session in minutes, can be set with SESSION_TIMEOUT")
+	serverCmd.Flags().DurationVar(&config.AppCfg.SessionTTL, "session-ttl", env.ParseDuration("SESSION_TTL", 12*time.Hour), "Total time to live for a session in hours, can also be set with SESSION_TTL")
+	serverCmd.Flags().DurationVar(&config.AppCfg.SessionTimeout, "session-timeout", env.ParseDuration("SESSION_TIMEOUT", 2*time.Hour), "Timeout time for a session in minutes, can be set with SESSION_TIMEOUT")
 	return serverCmd
 }
 
