@@ -13,7 +13,7 @@ tasks:
       - go build -o dist/t1dash ./cmd/
 
   run:
-    - air -- {{ .BIN_ARGS }}
+    - go tool air -- {{ .BIN_ARGS }}
 
   docker-build:
     cmds:
